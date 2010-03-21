@@ -1,0 +1,3 @@
+--include-file "vendor/plugins/silk/app/*,vendor/plugins/silk/lib/*"
+--exclude "spec/*,gems/*"
+--rails

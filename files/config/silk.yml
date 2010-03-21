@@ -1,0 +1,31 @@
+#  SILK WEBSITE SETTINGS
+#  ---------------------
+
+#  Allowed Content Types
+#  ---------------------
+#  If more than one type is allowed a drop down box will be shown at the top right when editing content
+#  The optional "label:" attribute allows you to provide a friendly name to non-technical clients "e.g. Dynamic"
+#
+#  Supported Types:
+#
+#    plain      Ideal for short content where no markup is required, although static HTML is allowed. New lines are automatically converted to <br/>.
+#    html       Regular static HTML. No ability to execute code or include snippets etc.
+#    erb        Regular HTML with dynamic ERB content. Only choose if you are comfortable with your client executing code.
+#    haml       Available only if the haml gem in installed. Supports dynamic content by default.
+
+allowed_content_types: 
+- type: plain
+  label: Plain Text
+- type: html
+  label: Static HTML
+- type: erb
+  label: Dynamic HTML
+- type: haml
+  label: HAML
+
+
+# Default Content Type
+# --------------------
+# New content will be automatically use this content type if not otherwise specified. Defaults to html if not present.
+
+default_content_type: html

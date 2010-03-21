@@ -1,0 +1,14 @@
+!!!
+%html{ "xml:lang" => "en", :lang => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
+  %head
+    %title= page_title :suffix => 'My Website'
+    = silk_headers
+    = stylesheet_link_tag 'reset', 'layout', 'content'
+    = javascript_include_tag 'application'
+  %body
+    #content
+      #page
+        = page_content
+    #footer
+      = snippet 'Footer' do
+        &copy Copyright 2010 My Website. All rights reserved.

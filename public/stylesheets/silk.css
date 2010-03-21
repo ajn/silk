@@ -1,0 +1,368 @@
+/*
+  --------------------------------------------------------------------------
+  Silk CSS Library - Only loaded when logged in
+  --------------------------------------------------------------------------
+*/
+
+/* jQuery Overrides */
+
+/*.ui-widget-overlay {
+  opacity: 0.7;
+  background-color: black;
+}*/
+
+
+/* Reset Dialog CSS */
+
+.ui-dialog p {
+  padding: 0;
+  margin: 0;
+}
+
+#page-tabs .ui-tabs-nav,
+#content-tabs .ui-tabs-nav {
+  background: none;
+}
+
+#page-tabs, #page-tabs .ui-widget-header, #page-tabs .ui-tabs-panel,
+#content-tabs, #content-tabs .ui-widget-header, #content-tabs .ui-tabs-panel {
+  padding: 0;
+  border: none;
+}
+
+#page-tabs .ui-tabs-nav li a,
+#content-tabs .ui-tabs-nav li a {
+  font-size: 12px;
+  padding: 4px 7px;
+}
+
+
+/* Content Render Error */
+
+.silk-content-render-error {
+  background-color: red;
+  color: white;
+  padding: 2px 4px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+
+/* Dialog */
+
+#silk-dialog {
+  text-align: center;
+}
+
+#silk-dialog-header {
+  height: 35px;
+  font-size: 12px;
+  color: #666;
+}
+
+#silk-dialog-info-line {
+  float: left;
+  text-align: left;
+  width: 70%;
+  padding: 6px 0;
+}
+
+#silk-dialog-info-line .ui-icon {
+  float: left;
+  margin: 0 6px 0 0; 
+}
+
+.silk-dialog-padding {
+  padding: 15px 1px 0 1px;
+  font-size: 15px;
+}
+
+.silk-dialog-padding p {
+  margin: 0;
+  padding: 0 0 15px 0;
+}
+
+.silk-dialog-page-path {
+  font-weight: bold;
+  color: #000;
+  font-size: 12px;
+}
+
+
+/* Dialog Tabbed Panels */
+
+.silk-tab-panel {
+  clear: both;
+  width: 96%;
+  min-height: 360px;
+  background-color: white;
+  border: 1px solid silver;
+  font-size: 12px;
+  font-weight: normal;
+  color: #555;
+}
+
+.silk-tab-panel-padded {
+  padding: 15px;
+}
+
+.silk-tab-panel h4 {
+  color: black;
+  font-size: 14px;
+  padding: 0 0 10px 0;
+  margin: 0;
+}
+
+.silk-tab-panel fieldset {
+  border: none;
+  width: 500px;
+  padding: 0;
+}
+
+.silk-tab-panel label {
+  display: inline-block;
+  width: 200px;
+  height: 30px;
+}
+
+
+/* Specific Dialog Styling */
+
+#silk-dialog-content textarea {
+  margin: 0 auto;
+  font: 14px monospace;
+  width: 864px;
+  height: 376px;
+  padding: 5px;
+  border: 1px solid silver;
+}
+
+#silk-dialog-content-type-selector {
+  float: right;
+  text-align: right;
+  width: 30%;
+  padding: 5px 0 0 0;
+  color: #666;
+}
+
+#silk-dialog-content-type-selector select {
+  font-size: 11px;
+  margin: 0 0 0 5px;
+}
+
+#silk-dialog-page-title {
+  width: 600px;
+  float: left;
+}
+
+#silk-dialog-page-title input {
+  width: 100%;
+  font-size: 16px;
+  color: #000;
+  border: none;
+  padding: 2px 0;
+}
+
+
+/* Meta Tags */
+
+.silk-meta-tag-section {
+  clear: both;
+  padding: 10px 0;
+}
+
+.silk-meta-tag-section h4 {
+  float: left;
+  width: 90px;
+  font-size: 12px;
+  padding: 4px 0 0 0;
+}
+
+.silk-meta-tag-values {
+  padding: 0 0 0 100px;
+}
+
+.silk-meta-tag-values input {
+  border: 1px solid #444;
+}
+
+.silk-meta-tag-values input.silk-static-value {
+  width: 730px;
+}
+
+.silk-meta-tag-values input.silk-custom-type {
+  width: 120px;
+  margin: 0 10px 0 0;
+}
+
+.silk-meta-tag-values input.silk-custom-value {
+  width: 575px;
+}
+
+.silk-meta-tag-values p {
+  color: #888;
+  margin: 5px 0 0 0;
+}
+
+.silk-meta-tag-custom-field {
+  margin: 0 0 10px 0;
+}
+
+.silk-meta-tag-custom-field .silk-icon-delete {
+  margin: 4px 5px 0 0;
+  width: 16px;
+  height: 16px;
+  float: left;
+  background: url(/silk_engine/stylesheets/smoothness/images/ui-icons_454545_256x240.png);
+  background-position: -32px -192px;
+}
+
+.silk-meta-tag-field .silk-icon-add {
+  margin: 0 5px 0 0;
+  width: 16px;
+  height: 16px;
+  float: left;
+  background: url(/silk_engine/stylesheets/smoothness/images/ui-icons_454545_256x240.png);
+  background-position: 0 -192px;
+}
+ 
+
+/* Editable Content */
+
+.silk-editable-content {
+  cursor: pointer;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+.silk-editable-content-empty {
+  margin: 5px;
+  font-size: 11px;
+}
+
+
+/* User Dialogues */
+
+#silk-dialog-login {
+  overflow-y: hidden;
+}
+
+#silk-dialog-user-login .silk-left {
+  float: left;
+  width: 290px;
+  height: 170px;
+}
+
+#silk-dialog-user-login .silk-right {
+  padding: 15px 0 0 0;
+}
+
+#silk-dialog-user-login label, #silk-dialog-user-login input {
+  display: block;
+}
+
+#silk-dialog-user-login label {
+  color: #888;
+  font-size: 13px;
+}
+
+#silk-dialog-user-login input {
+  margin: 4px 0 20px 0; 
+}
+
+
+/* Admin Menu */
+
+#silk-admin-menu, #silk-admin-menu * {
+  color: #ccc;
+  font: normal 12px "Lucida Grande", Arial, sans-serif;
+}
+
+#silk-admin-menu {
+  width: 100%;
+  height: 35px;
+  text-align: center;
+  background-color: #252525;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+
+#silk-admin-menu-left {
+  float: left;
+  text-align: left;
+  width: 450px;
+}
+
+#silk-admin-menu-right {
+  float: right;
+  text-align: right;
+  width: 150px;
+}
+
+#silk-admin-menu-buttons {
+  padding: 8px 0 0 10px;
+}
+
+#silk-admin-menu-buttons ul {
+  margin: 0;
+  padding: 0;
+}
+
+#silk-admin-menu-buttons li {
+  list-style-type: none;
+  float: left;
+}
+
+#silk-admin-menu-buttons a {
+  float: left;
+  display: block;
+  text-decoration: none;
+  padding: 2px 8px;
+  margin: 0 8px 0 0;
+  background-color: #555;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+#silk-admin-menu-buttons a:hover {
+  background-color: #666666;
+  color: white;
+}
+
+#silk-admin-menu-spacer {
+  height: 35px;
+  width: 100%;
+}
+
+
+/* Flash */
+
+#silk-flash-container {
+  position: absolute;
+  z-index: 100;
+  top: 35px;
+  right: 10px;
+  float: right;
+  height: 50px;
+  text-align: right;
+  margin: 10px;
+}
+
+#silk-flash-message {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 3px 7px;
+  color: white;
+  font: normal 14px "Lucida Grande", Arial, sans-serif;
+}
+
+.silk-flash-notice {
+  background-color: #119600;
+}
+
+.silk-flash-error {
+  background-color: #D10000;
+}
+
+

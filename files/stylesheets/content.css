@@ -1,0 +1,21 @@
+/*
+
+  Example CSS to set content styles
+  Feel free to delete and replace with your own CSS
+
+*/
+
+
+/* Default classes for Welcome Screen - Delete everything below this line and replace with your own */
+
+body {
+  font: normal 14px Verdana, Arial;
+  color: #777;
+  background-color: #ddd;
+}
+
+h1 {
+  font-size: 20px;
+  color: #000;
+  margin: 0 0 20px 0;
+}

@@ -1,0 +1,28 @@
+/*
+
+  Example CSS to set layout and positioning aspects of the design
+  Feel free to delete and replace with your own CSS
+
+*/
+
+
+/* Default classes for Welcome Screen - Delete everything below this line and replace with your own */
+
+#content {
+  width: 800px;
+  margin: 0 auto;
+}
+
+#page {
+  padding: 30px;
+  border: 1px solid #bbb;
+  background-color: white;
+  margin: 15px 0;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+
+#footer {
+  color: #888;
+  font-size: 10px;
+}

@@ -1,0 +1,96 @@
+Silk
+====
+
+Version 0.0.1 - Alpha Release
+
+
+Description
+-----------
+
+Silk is a simple yet powerful content management system built for speed and ease of use.
+
+
+Getting started
+---------------
+
+At the moment this preview release must be installed as a plugin into a fresh rails 2.3.5 project. Not yet tested in IE.
+
+sudo gem install authlogic   # required by silk. tested with 2.1.3
+rails silk_site
+cd silk_site
+(create a new database and update your database.yml settings)
+ruby script/plugin install git://github.com/aconix/silk.git
+rake silk:install:fresh
+ruby script/server
+
+Goto http://localhost:3000/login and login with:
+
+Username: admin
+Password: password
+
+
+Configuring settings
+--------------------
+
+Once you're up and running, you'll want to check the settings file in /config/silk.yml to make any adjustments for your client.
+For example, if you know they will not require any dynamic content you may remove the erb content type.
+
+
+Mark content as editable
+------------------------
+
+You may mark existing content as editable by wrapping it inside a 'editable' helper block. This will work whether or not the content
+lives in a regular Rails view or inside a dynamic page. Any content inside the block will be copied to the database the first time
+the view is rendered upon which it will become editable by the end user.
+
+If the content is to appear on multiple pages use the snippet helper instead.
+
+
+Creating a new dynamic page
+---------------------------
+
+Assuming you're logged in, page creation works exactly like a Wiki. Simply type in or link to the URL you want and you'll be prompted to create it.
+
+Silk allows you to include editable content within regular rails controllers and views. Just ensure your controller inherits from Silk::BaseController and call the editable/snippet helpers within the views as usual.
+
+
+Development Priorities
+----------------------
+
+Things I'm looking into at the moment (any help greatly appreciated):
+
+* Fix bug: Why is content being stored twice when updated?! The existing record loses the path then a new record is created... hmm...
+
+* How do we make testing/speccing fully self-contained within the plugin. At the moment I'm using the silk_testing app (which contains the silk plugin) for this and running: rake spec:silk
+
+* Building a slick-as-hell user management interface: Creating new users, changing passwords, etc.
+
+* Build a search feature for content. This should return near Google-like results which can be styled with CSS
+
+
+Longer term goals:
+
+* Create an 'App Store'-like plugin infrastructure to handle all the cool things we want to do in the future:
+  News, Blogs, Twitter, Contact Us forms, etc
+
+
+
+==============
+= About Silk =
+==============
+
+The initial concept for Silk was born in 2005 when I became frustrated at the complexity of existing CMS solutions.
+The goals for Silk today remain the same as they were back then:
+
+* Offer end users (typically your clients) a simple way to edit their content
+* Offer designers unlimited flexibility. Silk should not restrict them in anyway.
+* Offer developers the ability to plug Silk into an existing app or extend Silk to suit their needs
+* Reduce the amount of interface - clients should never need to leave their beloved website to edit something in an alien environment
+* Don't try to be enterprisy. If you want masses of multi-user features there are plenty of complicated systems out there already
+* Make the interface fast and snappy - Silk uses jQuery dialogs extensively to keep page reloads and AJAX calls to the bare minimum
+
+Many thanks to Alex Stubbs who, in addition to reviewing this code, worked tirelessly on the very first version of Silk (back in 2006)
+and provided many of the original concepts that are present in this new version.
+
+
+Copyright (c) 2010 Aconix Ltd, released under the MIT license
