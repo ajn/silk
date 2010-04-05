@@ -1,6 +1,8 @@
+.bundle
 .DS_Store
-log/*
-tmp/*
+db/*.sqlite3
+log/*.log
+tmp/**/*
 coverage
 public/javascripts/all.js
 public/stylesheets/all.css

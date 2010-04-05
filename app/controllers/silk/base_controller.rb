@@ -44,7 +44,7 @@ class Silk::BaseController < ApplicationController
 
   
     def silk_initialize
-      self.silk_path = request.env["REQUEST_PATH"] || request.env["REQUEST_URI"] || request.env["SCRIPT_NAME"]
+      self.silk_path = request.path || request.uri || request.script_name
       self.silk_content = Silk::Content.all_for_path(silk_path)
     end
     
@@ -59,7 +59,7 @@ class Silk::BaseController < ApplicationController
     end
     
     def request_login!
-      silk_js_action "SilkPage.user.login();"
+      silk_js_action "Silk.user.login();"
     end
 
 end

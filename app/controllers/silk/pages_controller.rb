@@ -13,30 +13,26 @@ class Silk::PagesController < Silk::BaseController
   
   def update
     if @page.update_attributes(params[:page])
-      flash[:notice] = "Page updated successfully"
+      redirect_to :back, :notice => "Page updated successfully"
     else
-      flash[:error] = "Error: Unable to update page"
+      redirect_to :back, :error => "Error: Unable to update page"
     end
-    redirect_to :back
   end
   
   def create
     @page = Silk::Page.new(params[:page])
     if @page.save
-      flash[:notice] = "New page created successfully"
+      redirect_to :back, :notice => "New page created successfully"
     else
-      flash[:error] = "Error: Unable to create page"
+      redirect_to :back, :error => "Error: Unable to create page"
     end
-    redirect_to :back
   end
   
   def destroy
     if !@page.protected? and @page.destroy
-      flash[:notice] = "Page deleted successfully"
-      redirect_to '/'
+      redirect_to root_path, :notice => "Page deleted successfully"
     else
-      flash[:error] = "Error: Unable to delete page"
-      redirect_to :back
+      redirect_to :back, :error => "Error: Unable to delete page"
     end
   end
 
@@ -48,7 +44,7 @@ class Silk::PagesController < Silk::BaseController
     end
     
     def show_page_not_found
-      silk_js_action "SilkPage.createNewPagePrompt('#{silk_path}');" if current_user
+      silk_js_action "Silk.page.createNewPagePrompt('#{silk_path}');" if current_user
       render :inline => 'Page Not Found', :layout => silk_layout('application'), :status => 404
     end
     

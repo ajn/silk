@@ -5,11 +5,10 @@ class Silk::ContentController < Silk::BaseController
   def update
     if @content.update_attributes(params[:content])
       silk_snippet_cache[@content.name] = @content if @content.snippet?
-      flash[:notice] = "#{@content.name || 'Content'} updated successfully"
+      redirect_to :back, :notice => "#{@content.name || 'Content'} updated successfully"
     else
-      flash[:error] = "Error: Unable to update #{@content.name || 'content'}"
+      redirect_to :back, :error => "Error: Unable to update #{@content.name || 'content'}"
     end
-    redirect_to :back
   end
 
   private

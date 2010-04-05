@@ -5,11 +5,48 @@
 */
 
 
-/* Setup */
+/* MAIN */
 
-silk = {
-  version: "0.0.7"
+silk = function() {
+  version: "0.0.8";
 };
+silk.prototype = {
+  
+  init: function() {
+    this.initialChecks();
+    this.user = new silk.user();
+    this.flash = new silk.flash().init().process();
+    if (_silk_data.user) this.initUser();
+    return this;
+  },
+  
+  initUser: function() {
+    this.processApps();
+    this.page = $.extend(new silk.page(), _silk_data.page);
+    this.page.init();
+    this.admin_menu = new silk.admin_menu().init();
+    return this;
+  },
+  
+  // Called externally once the page has fully finished loading
+  executeActions: function() {
+    $(_silk_data.actions).each(function(){ eval(String(this));  });
+  },
+  
+  initialChecks: function() {
+    if (typeof(_silk_data) == "undefined") alert('Silk Error: The _silk_data variable is not present. Please ensure you include the silk_headers helper in your layout/page.');
+    return this;
+  },
+  
+  processApps: function() {
+    this.apps = {};
+    var obj = this;
+    $.each(_silk_data.quick_access_apps, function() {
+      obj.apps[this.app_name] = new silk.app(this);
+    });
+  },
+  
+},
 
 
 /* Page */
@@ -21,30 +58,11 @@ silk.page = function() {
 silk.page.prototype = {
   
   init: function() {
-    this.initialChecks();
-    this.user = new silk.user();
-    this.flash = new silk.flash().init().process();
-    this.widget = new silk.dialog.widget();
-    if (_silk_data.user) this.initUser();
-    return this;
-  },
-  
-  initUser: function() {
     this.setupEditableContent();
-    this.admin_menu = new silk.admin_menu().init();
+    this.widget = new silk.dialog.widget();
     this.meta_tags = new silk.page.meta_tags();
     this.meta_tags.init();
     this.editPageIfNoContent();
-    return this;
-  },
-  
-  // Called externally once the page has fully finished loading
-  executeActions: function() {
-    $(_silk_data.actions).each(function(){ eval(String(this));  });
-  },
-  
-  initialChecks: function() {
-    if (typeof(_silk_data) == "undefined") alert('Silk Error: The _silk_data variable is not present. Please ensure you include the silk_headers helper in your layout/page.');
     return this;
   },
   
@@ -80,7 +98,7 @@ silk.page.prototype = {
   destroy: function() {
     this.widget.confirm('delete_page', 'Confirmation',
       '<p>Are you sure you want to <strong>permanently</strong> delete this page?</p> <p class="silk-dialog-page-path">' + this.path + '</p>',
-       { 'Delete Page': function(){ $('#silk-dialog-form').submit(); },
+       { 'Delete Page': function(){ $('#silk-dialog-form-delete_page').submit(); },
          'Cancel': function(){ $(this).dialog('close'); }, },
        '/silk/pages/' + this.id, 'delete');
   },
@@ -99,8 +117,8 @@ silk.page.prototype = {
       $(this).data('obj', obj).dblclick(function(){ $(this).editContents(); });
       $(this).data('originalBackgroundColor', $(this).css('backgroundColor'));
       
-      $(this).mouseover(function(){ if (!SilkPage.highlight_editable_elements) obj.highlight(); });
-      $(this).mouseout( function(){ if (!SilkPage.highlight_editable_elements) obj.unHighlight(); });
+      $(this).mouseover(function(){ if (!Silk.page.highlight_editable_elements) obj.highlight(); });
+      $(this).mouseout( function(){ if (!Silk.page.highlight_editable_elements) obj.unHighlight(); });
     });
     return this;
   },
@@ -177,37 +195,37 @@ silk.page.meta_tags.prototype = {
   },
   
   renderStatic: function() {
-     var obj = this;
-     var output = $.map(this.static_types, function(tag_type) {
-       var data = $.grep(obj.data, function(x){ return x.name == tag_type })[0] || {name: tag_type}
-       var tag = $.extend(data, new silk.page.meta_tag());
-       return tag.renderStatic();
-     });
-     return output.join('');
-   },
+    var obj = this;
+    var output = $.map(this.static_types, function(tag_type) {
+      var data = $.grep(obj.data, function(x){ return x.name == tag_type })[0] || {name: tag_type}
+      var tag = $.extend(data, new silk.page.meta_tag());
+      return tag.renderStatic();
+    });
+    return output.join('');
+  },
    
-   renderCustom: function() {
-     var output = '<div class="silk-meta-tag-section"><h4>Custom</h4><div class="silk-meta-tag-values"><div id="silk-meta-tags-custom">';
-     output += $.map(this.data, function(data) {
-       if (data.name == 'keywords' || data.name == 'description') return '';
-       var tag = $.extend(data, new silk.page.meta_tag());
-       return tag.renderCustom();
-     }).join('');
-     output += '</div>' + this.addNewButton() + '</div></div>';
-     return output;
-   },
-   
-   addNewButton: function() {
-     return '<div class="silk-meta-tag-field" style="margin: 5px 0 0 0">' +
-       '<a href="#" onclick="SilkPage.meta_tags.add(); return false;"><span class="silk-icon-add" /> Add custom tag</a>' +
-     '</div>';
-   },
-   
-   add: function() {
-     var tag = new silk.page.meta_tag();
-     $('#silk-meta-tags-custom').append(tag.renderCustom());
-     return this;
-   },
+  renderCustom: function() {
+    var output = '<div class="silk-meta-tag-section"><h4>Custom</h4><div class="silk-meta-tag-values"><div id="silk-meta-tags-custom">';
+    output += $.map(this.data, function(data) {
+      if (data.name == 'keywords' || data.name == 'description') return '';
+      var tag = $.extend(data, new silk.page.meta_tag());
+      return tag.renderCustom();
+    }).join('');
+    output += '</div>' + this.addNewButton() + '</div></div>';
+    return output;
+  },
+
+  addNewButton: function() {
+    return '<div class="silk-meta-tag-field" style="margin: 5px 0 0 0">' +
+    '<a href="#" onclick="Silk.page.meta_tags.add(); return false;"><span class="silk-icon-add" /> Add custom tag</a>' +
+    '</div>';
+  },
+
+  add: function() {
+    var tag = new silk.page.meta_tag();
+    $('#silk-meta-tags-custom').append(tag.renderCustom());
+    return this;
+  },
  
 };
 
@@ -243,6 +261,99 @@ silk.page.meta_tag.prototype = {
 };
 
 
+/* Editable Content */
+
+silk.editable_content = function() {
+  this.widget = new silk.dialog.widget();
+};
+silk.editable_content.prototype = {
+  
+  element: function() {
+    return $('#silk-ec-area-id-' + this.id);
+  },
+  
+  // Note: The only difference between a snippet and regular content element is the nil path
+  isSnippet: function() {
+    if (this.path == null) return true;
+  },
+  
+  edit: function() {
+    var title = 'Edit &quot;' + this.name + '&quot; content';
+    Silk.page.contentDialog().title(title).body(this.form()).open();
+    $("#silk-edit-content-textarea").val(this.body);
+    $('#content-tabs').tabs();
+    this.showInfoLine();
+  },
+
+  highlightColor: function() {
+    return this.isSnippet() ? '#A7FDB6' : '#FCFFA7';
+  },
+
+  highlight: function() {
+    this.element().css('backgroundColor', this.highlightColor());
+    return this;
+  },
+  
+  unHighlight: function() {
+    this.element().css('backgroundColor', this.element().data('originalBackgroundColor'));
+    return this;
+  },
+  
+  toggleHighlight: function() {
+    if (Silk.page.highlight_editable_elements) {
+      this.makeInvisibleAreasVisible().highlight();
+    } else {
+      this.restoreInvisibleAreas().unHighlight();
+    }
+    return this;
+  },
+  
+  makeInvisibleAreasVisible: function() {
+    if ($(this.element()).html() == '') $(this.element()).html('<div class="silk-editable-content-empty">Double click to add content to <strong>' + this.name + '</strong></div>');
+    return this;
+  },
+  
+  restoreInvisibleAreas: function() {
+    if (this.element().find('div.silk-editable-content-empty').length) this.element().html('');
+    return this;
+  },
+
+  form: function() {
+    return '<form id="silk-dialog-form" method="post" action="/silk/content/' + this.id + '">' +
+      '<div id="silk-dialog-header"><div id="silk-dialog-info-line"></div></div>' +
+      '<input type="hidden" name="_method" value="put"/><input type="hidden" name="authenticity_token" value="' + _silk_data.authenticity_token + '"/>' +
+      
+        '<div id="content-tabs">' +
+          '<ul><li><a href="#content-tab-contents">Content</a></li><li><a href="#content-tab-properties">Properties</a></li>' +
+          '<div id="content-tab-contents"><textarea name="content[body]" id="silk-edit-content-textarea" tabindex="2"></textarea></div>' +
+          '<div id="content-tab-properties">' + this.formTabProperties() + '</div>' +
+        '</div>' +
+      
+      '</form>';
+  },
+
+  // Pretty much duplicated from page - lets refactor this
+  formTabProperties: function() {
+    var obj = this;
+    var output = '<div class="silk-tab-panel silk-tab-panel-padded">' +
+      '<fieldset><label for="silk-page-content-type">Content Type</label>' +
+        this.widget.contentTypeSelector(this, 'content[content_type]') +
+       '</fieldset></div>';
+    return output;
+  },
+
+  showInfoLine: function() {
+    if (this.isSnippet()) {
+      $('#silk-dialog-info-line').hide().html('<div class="ui-icon ui-icon-info"></div> Caution: You are about to change content which may appear on several pages.').fadeIn();
+    } else {
+      $('#silk-dialog-info-line').html('');
+    }
+    return this;
+  },
+  
+};
+
+
 /* Users */
 
 silk.user = function() {};
@@ -271,7 +382,7 @@ silk.user.prototype = {
   },
   
   logout: function() {
-    window.location = '/silk/sessions/destroy';
+    window.location = '/logout';
     return this;
   },
  
@@ -397,44 +508,56 @@ silk.admin_menu = function() {
 silk.admin_menu.prototype = {
   
   init: function() {
-    this.render().displayButtons();
+    this.renderBar().renderButtons().renderUser().renderAppButtons();
     return this;
   },
   
-  render: function() {
+  renderBar: function() {
     $('body').prepend('</div><div id="silk-admin-menu">' +
       '<div id="silk-admin-menu-left"> <div id="silk-admin-menu-buttons"><ul></ul></div> </div><div id="silk-admin-menu-right"></div>' +
     '</div><div id="silk-admin-menu-spacer">');
     return this;
   },
     
-  displayButtons: function() {
+  renderButtons: function() {
     
-    if (SilkPage.isEditable()) {
+    if (Silk.page.isEditable()) {
 
       new silk.admin_menu.button(
         function(){ return 'Edit page' }, 
-        function(){ SilkPage.edit(); }).init();
+        function(){ Silk.page.edit(); }).init();
         
-      if (SilkPage.path != '/')
+      if (Silk.page.path != '/')
         new silk.admin_menu.button(
         function(){ return 'Delete page' }, 
-        function(){ SilkPage.destroy(); }).init();
+        function(){ Silk.page.destroy(); }).init();
     };
 
-    if (SilkPage.numEditableContentAreas() > 0) {
+    if (Silk.page.numEditableContentAreas() > 0) {
 
       new silk.admin_menu.button(
-        function(){ return (SilkPage.highlight_editable_elements ? 'Hide' : 'Show') + ' ' + SilkPage.numEditableContentAreas() + ' editable area' + (SilkPage.numEditableContentAreas() != '1' ? 's' : ''); },
-        function(){ SilkPage.toggleHighlightEditableContent(); }).init();
+        function(){ return (Silk.page.highlight_editable_elements ? 'Hide' : 'Show') + ' ' + Silk.page.numEditableContentAreas() + ' editable area' + (Silk.page.numEditableContentAreas() != '1' ? 's' : ''); },
+        function(){ Silk.page.toggleHighlightEditableContent(); }).init();
     }
     
     new silk.admin_menu.button(
       function(){ return 'Logout' }, 
-      function(){ SilkPage.user.logout(); }).init();
+      function(){ Silk.user.logout(); }).init();
 
     return this;
   },
+  
+  renderUser: function() {
+    $('#silk-admin-menu-right').append('<div id="silk-admin-menu-user"><a href="#" onclick="return Silk.user.logout();">owenb</a></div>');
+    return this;  
+  },
+  
+  renderAppButtons: function() {
+    $('#silk-admin-menu-right').append('<div id="silk-admin-menu-app-buttons"></div>');
+    $.each(Silk.apps, function() { this.renderQuickAccessIcon(); });
+    return this;
+  },
+
 };
 
 
@@ -469,98 +592,22 @@ silk.admin_menu.button.prototype = {
 
 };
 
-  
-/* Editable Content */
 
-silk.editable_content = function() {
-  this.widget = new silk.dialog.widget();
+/* Apps */
+
+silk.app = function(details) {
+  $.extend(this, details);
+  this.button_id = 'silk-admin-menu-app-button-' + this.app_name;
 };
-silk.editable_content.prototype = {
-  
-  element: function() {
-    return $('#silk-ec-area-id-' + this.id);
-  },
-  
-  // Note: The only difference between a snippet and regular content element is the nil path
-  isSnippet: function() {
-    if (this.path == null) return true;
-  },
-  
-  edit: function() {
-    var title = 'Edit &quot;' + this.name + '&quot; content';
-    SilkPage.contentDialog().title(title).body(this.form()).open();
-    $("#silk-edit-content-textarea").val(this.body);
-    $('#content-tabs').tabs();
-    this.showInfoLine();
+silk.app.prototype = {
+
+  renderQuickAccessIcon: function () {
+    $('#silk-admin-menu-app-buttons').append('<div id="' + this.button_id + '" onclick="Silk.apps.' + this.app_name + '.open(); return false;"></div>');
+    $("#" + this.button_id).attr('title', this.name).
+      css('background', 'url(/silk_engine/apps/'+ this.app_name + '/icons/small.png) no-repeat');
   },
 
-  highlightColor: function() {
-    return this.isSnippet() ? '#A7FDB6' : '#FCFFA7';
-  },
-
-  highlight: function() {
-    this.element().css('backgroundColor', this.highlightColor());
-    return this;
-  },
-  
-  unHighlight: function() {
-    this.element().css('backgroundColor', this.element().data('originalBackgroundColor'));
-    return this;
-  },
-  
-  toggleHighlight: function() {
-    if (SilkPage.highlight_editable_elements) {
-      this.makeInvisibleAreasVisible().highlight();
-    } else {
-      this.restoreInvisibleAreas().unHighlight();
-    }
-    return this;
-  },
-  
-  makeInvisibleAreasVisible: function() {
-    if ($(this.element()).html() == '') $(this.element()).html('<div class="silk-editable-content-empty">Double click to add content to <strong>' + this.name + '</strong></div>');
-    return this;
-  },
-  
-  restoreInvisibleAreas: function() {
-    if (this.element().find('div.silk-editable-content-empty').length) this.element().html('');
-    return this;
-  },
-
-  form: function() {
-    return '<form id="silk-dialog-form" method="post" action="/silk/content/' + this.id + '">' +
-      '<div id="silk-dialog-header"><div id="silk-dialog-info-line"></div></div>' +
-      '<input type="hidden" name="_method" value="put"/><input type="hidden" name="authenticity_token" value="' + _silk_data.authenticity_token + '"/>' +
-      
-        '<div id="content-tabs">' +
-          '<ul><li><a href="#content-tab-contents">Content</a></li><li><a href="#content-tab-properties">Properties</a></li>' +
-          '<div id="content-tab-contents"><textarea name="content[body]" id="silk-edit-content-textarea" tabindex="2"></textarea></div>' +
-          '<div id="content-tab-properties">' + this.formTabProperties() + '</div>' +
-        '</div>' +
-      
-      '</form>';
-  },
-
-  // Pretty much duplicated from page - lets refactor this
-  formTabProperties: function() {
-    var obj = this;
-    var output = '<div class="silk-tab-panel silk-tab-panel-padded">' +
-      '<fieldset><label for="silk-page-content-type">Content Type</label>' +
-        this.widget.contentTypeSelector(this, 'content[content_type]') +
-       '</fieldset></div>';
-    return output;
-  },
-
-  showInfoLine: function() {
-    if (this.isSnippet()) {
-      $('#silk-dialog-info-line').hide().html('<div class="ui-icon ui-icon-info"></div> Caution: You are about to change content which may appear on several pages.').fadeIn();
-    } else {
-      $('#silk-dialog-info-line').html('');
-    }
-    return this;
-  },
-  
-};
+},
 
 
 /* Helpers */
@@ -584,7 +631,7 @@ jQuery.fn.extend({
 /* On Load */
 
 $(document).ready(function() {
-  SilkPage = $.extend((new silk.page), _silk_data.page);
-  SilkPage.init();
-  window.onload = SilkPage.executeActions;
+  Silk = new silk();
+  Silk.init();
+  window.onload = Silk.executeActions;
 });

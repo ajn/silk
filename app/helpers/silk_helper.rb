@@ -4,7 +4,7 @@ module SilkHelper
   # A few things to consider... in production mode we should probably get jQuery direct from the Google CDN
   # Note the _silk_page variable is defined deliberately before silk.js is loaded
   def silk_headers
-    silk_meta_tags + (silk_load? ? silk_editor_libraries : '')
+    raw(silk_meta_tags + (silk_load? ? silk_editor_libraries : ''))
   end
   
   # This is a multi-functional Title helper. It can be used to get and set titles
@@ -22,7 +22,7 @@ module SilkHelper
   
   # Yields the page content. Wraps it in a div allowing double-clicking if page is editable. More functionality to come soon.
   def page_content
-    silk_editable? ? page_wrapper : @content_for_layout
+    silk_editable? ? page_wrapper : raw(@_content_for[:layout])
   end
   
   # Indicates 'normal' editable content should appear, attached to the current page path.
@@ -59,6 +59,7 @@ module SilkHelper
         :allowed_content_types => Silk::Content.allowed_types,
         :available_layouts => Silk::Page.available_layouts.map{|x| {:layout => x, :label => x.humanize }},
         :editable_content => {},
+        :quick_access_apps => Silk::App.quick_access_details,
         :actions => silk_js_actions,
       }
     end
@@ -69,9 +70,19 @@ module SilkHelper
     end
     
     def silk_editor_libraries
-      stylesheet_link_tag("/silk_engine/stylesheets/smoothness/jquery-ui-1.7.2.custom.css", "/silk_engine/stylesheets/silk.css") +
+      @stylesheets = ["libs/smoothness/jquery-ui-1.7.2.custom.css", "core/stylesheets/silk.css"]
+      @javascripts = ["libs/jquery-1.3.2.js", "libs/jquery-ui-1.7.2.custom.min.js", "core/javascripts/silk.js"]
+      include_silk_app_libraries!
       javascript_tag("_silk_data = #{silk_data.to_json};") +
-      javascript_include_tag("/silk_engine/javascripts/jquery-1.3.2.js", "/silk_engine/javascripts/jquery-ui-1.7.2.custom.min.js", "/silk_engine/javascripts/silk.js")
+      stylesheet_link_tag(@stylesheets.map{|x| "/silk_engine/#{x}"}, :cache => 'silk') +
+      javascript_include_tag(@javascripts.map{|x| "/silk_engine/#{x}"}, :cache => 'silk')
+    end
+    
+    def include_silk_app_libraries!
+      Silk::App.list.each do |app|
+        @javascripts << "apps/#{app}/javascripts/silk.app.#{app}.js"
+        @stylesheets << "apps/#{app}/stylesheets/silk.app.#{app}.css"
+      end
     end
     
     def silk_js_actions
@@ -79,7 +90,7 @@ module SilkHelper
     end
     
     def page_wrapper
-      content_tag(:div, @content_for_layout, :ondblclick => 'SilkPage.edit();', :title => 'Double click to edit page')
+      content_tag(:div, raw(@_content_for[:layout]), :ondblclick => 'Silk.page.edit();', :title => 'Double click to edit page')
     end
   
     def load_content(name, initial_content, options)
@@ -100,7 +111,7 @@ module SilkHelper
   
     # Catches rendering errors (e.g. invalid HAML or ERB markup) should they occur and displays warning
     def render_content(content)
-      content.render
+      raw(content.render)
     rescue
       silk_load? ? content_tag(:div, 'Content Render Error!', :title => $!, :class => 'silk-content-render-error') : ''
     end

@@ -1,32 +1,41 @@
 Silk
 ====
 
-Version 0.0.1 - Alpha Release
-
-
-Description
------------
+Version 0.0.2 - Alpha Release
 
 Silk is a simple yet powerful content management system built for speed and ease of use.
+
+
+Release Highlights
+------------------
+
+Now fully migrated to Rails 3! Tested with Beta 2.
+Initial App support! Install the silk_simple_links plugin to see a proof of concept
+Better caching of stylesheets and javascripts and reorganisation of public directory
+Many other minor improvements
 
 
 Getting started
 ---------------
 
-At the moment this preview release must be installed as a plugin into a fresh rails 2.3.5 project. Not yet tested in IE.
+At the moment this preview release must be installed as a plugin into a fresh Rails 3.0.0beta2 project. Not yet tested in IE.
 
-sudo gem install authlogic   # required by silk. tested with 2.1.3
-rails silk_site
-cd silk_site
-(create a new database and update your database.yml settings)
-ruby script/plugin install git://github.com/aconix/silk.git
-rake silk:install:fresh
-ruby script/server
+1. Generate your new Rails 3 app with the rails command
 
-Goto http://localhost:3000/login and login with:
+2. Add the following line to your Gemfile, required by Silk:
+   gem 'authlogic', :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
 
-Username: admin
-Password: password
+3. Update your database.yml settings then create your database
+
+4. Install and lunch Silk with the following commands:
+   rails plugin install git://github.com/aconix/silk.git
+   rake silk:install:fresh
+
+5. Edit your config/routes.rb file and replace YourApp with your application's constant. We'll get this fixed soon.
+
+6. Launch your app (rails s), goto http://localhost:3000/login and login with:
+   Username: admin
+   Password: password
 
 
 Configuring settings
@@ -35,13 +44,15 @@ Configuring settings
 Once you're up and running, you'll want to check the settings file in /config/silk.yml to make any adjustments for your client.
 For example, if you know they will not require any dynamic content you may remove the erb content type.
 
+Note: To enable HAML, add the following to your Gemfile:  gem 'haml', '3.0.0.beta.1'
+
 
 Mark content as editable
 ------------------------
 
 You may mark existing content as editable by wrapping it inside a 'editable' helper block. This will work whether or not the content
 lives in a regular Rails view or inside a dynamic page. Any content inside the block will be copied to the database the first time
-the view is rendered upon which it will become editable by the end user.
+the view is rendered where upon it will become editable by the end user.
 
 If the content is to appear on multiple pages use the snippet helper instead.
 
@@ -52,26 +63,6 @@ Creating a new dynamic page
 Assuming you're logged in, page creation works exactly like a Wiki. Simply type in or link to the URL you want and you'll be prompted to create it.
 
 Silk allows you to include editable content within regular rails controllers and views. Just ensure your controller inherits from Silk::BaseController and call the editable/snippet helpers within the views as usual.
-
-
-Development Priorities
-----------------------
-
-Things I'm looking into at the moment (any help greatly appreciated):
-
-* Fix bug: Why is content being stored twice when updated?! The existing record loses the path then a new record is created... hmm...
-
-* How do we make testing/speccing fully self-contained within the plugin. At the moment I'm using the silk_testing app (which contains the silk plugin) for this and running: rake spec:silk
-
-* Building a slick-as-hell user management interface: Creating new users, changing passwords, etc.
-
-* Build a search feature for content. This should return near Google-like results which can be styled with CSS
-
-
-Longer term goals:
-
-* Create an 'App Store'-like plugin infrastructure to handle all the cool things we want to do in the future:
-  News, Blogs, Twitter, Contact Us forms, etc
 
 
 

@@ -1,6 +1,7 @@
-FILES_ROOT = "#{RAILS_ROOT}/vendor/plugins/silk/files"
+FILES_ROOT = "#{Rails.root}/vendor/plugins/silk/files"
 
-require "#{RAILS_ROOT}/vendor/plugins/silk/lib/rake_helpers"
+require "#{Rails.root}/vendor/plugins/silk/lib/silk"
+require "#{Rails.root}/vendor/plugins/silk/lib/rake_helpers"
 
 namespace :silk do
   
@@ -24,39 +25,39 @@ namespace :silk do
         end
       
         install_step "Removing default Rails index.html file", "SKIP (File not present)" do
-          FileUtils.remove "#{RAILS_ROOT}/public/index.html"
+          FileUtils.remove "#{Rails.root}/public/index.html"
         end
 
         install_step "Removing default Rails logo from images", "SKIP (File already deleted)" do
-          FileUtils.remove "#{RAILS_ROOT}/public/images/rails.png"
+          FileUtils.remove "#{Rails.root}/public/images/rails.png"
         end
 
         install_step "Copy over default application layout" do
-          FileUtils.cp "#{FILES_ROOT}/layouts/application.html.erb", "#{RAILS_ROOT}/app/views/layouts/application.html.erb"
+          FileUtils.cp "#{FILES_ROOT}/layouts/application.html.erb", "#{Rails.root}/app/views/layouts/application.html.erb"
         end
       
         install_step "Include SilkHelper within application helper" do
-          FileUtils.cp "#{FILES_ROOT}/helpers/application_helper.rb", "#{RAILS_ROOT}/app/helpers/application_helper.rb"
+          FileUtils.cp "#{FILES_ROOT}/helpers/application_helper.rb", "#{Rails.root}/app/helpers/application_helper.rb"
         end
       
         install_step "Copy over default CSS files" do
-          FileUtils.cp "#{FILES_ROOT}/stylesheets/reset.css",  "#{RAILS_ROOT}/public/stylesheets/reset.css"
-          FileUtils.cp "#{FILES_ROOT}/stylesheets/layout.css",  "#{RAILS_ROOT}/public/stylesheets/layout.css"
-          FileUtils.cp "#{FILES_ROOT}/stylesheets/content.css", "#{RAILS_ROOT}/public/stylesheets/content.css"
+          FileUtils.cp "#{FILES_ROOT}/stylesheets/reset.css",  "#{Rails.root}/public/stylesheets/reset.css"
+          FileUtils.cp "#{FILES_ROOT}/stylesheets/layout.css",  "#{Rails.root}/public/stylesheets/layout.css"
+          FileUtils.cp "#{FILES_ROOT}/stylesheets/content.css", "#{Rails.root}/public/stylesheets/content.css"
         end
       
         install_step "Overwrite default Rails routes.rb with Silk routes" do
-          FileUtils.cp "#{FILES_ROOT}/routes/routes.rb", "#{RAILS_ROOT}/config/routes.rb"
+          FileUtils.cp "#{FILES_ROOT}/routes/routes.rb", "#{Rails.root}/config/routes.rb"
         end
 
         install_step "Installing Silk preferences file to /config/silk.yml" do
-          FileUtils.cp "#{FILES_ROOT}/config/silk.yml", "#{RAILS_ROOT}/config/silk.yml"
+          FileUtils.cp "#{FILES_ROOT}/config/silk.yml", "#{Rails.root}/config/silk.yml"
         end
 
         install_step "Adding Silk tables to DB" do
           #exec "DROP TABLE silk_pages; DROP TABLE silk_content"
           ['Sessions','Users','Content','Pages'].each do |migration|
-            require "#{RAILS_ROOT}/vendor/plugins/silk/db/migrate/create_silk_#{migration.underscore}.rb"
+            require "#{Rails.root}/vendor/plugins/silk/db/migrate/create_silk_#{migration.underscore}.rb"
             "CreateSilk#{migration}".constantize.up
           end
         end
@@ -90,7 +91,7 @@ namespace :silk do
     task :hosting => :environment do
       
       install_step "Installing default .gitignore file" do
-        FileUtils.cp "#{FILES_ROOT}/other/gitignore", "#{RAILS_ROOT}/.gitignore"
+        FileUtils.cp "#{FILES_ROOT}/other/gitignore", "#{Rails.root}/.gitignore"
       end
 
     end    
@@ -103,8 +104,7 @@ namespace :silk do
     desc desc_package
     task :package do
       puts "#{desc_package}..."
-      FileUtils.cp "#{RAILS_ROOT}/public/silk_engine/javascripts/silk.js",  "#{RAILS_ROOT}/vendor/plugins/silk/public/javascripts/silk.js"
-      FileUtils.cp "#{RAILS_ROOT}/public/silk_engine/stylesheets/silk.css", "#{RAILS_ROOT}/vendor/plugins/silk/public/stylesheets/silk.css"
+      Silk::mirror_files_from "#{Rails.root}/public/silk_engine/core", "#{Rails.root}/vendor/plugins/silk/public/core"
       puts "Done!"
     end
   
@@ -119,14 +119,14 @@ namespace :silk do
     desc "Dump entire database contents to /db/dump.sql"
     task :dump => :environment do
       puts "Dumping entire database contents to /db/dump.sql..."
-      `mysqldump -u#{db_conf['username']} -p#{db_conf['password']} #{db_conf['database']} > #{RAILS_ROOT}/db/dump.sql`
+      `mysqldump -u#{db_conf['username']} -p#{db_conf['password']} #{db_conf['database']} > #{Rails.root}/db/dump.sql`
       puts "Done!"
     end
     
     desc "Restore entire database contents from /db/dump.sql"
     task :restore => :environment do
       puts "Restoring entire database contents from /db/dump.sql..."
-      `mysql -u#{db_conf['username']} -p#{db_conf['password']} #{db_conf['database']} < #{RAILS_ROOT}/db/dump.sql`
+      `mysql -u#{db_conf['username']} -p#{db_conf['password']} #{db_conf['database']} < #{Rails.root}/db/dump.sql`
       puts "Done!"
     end
 

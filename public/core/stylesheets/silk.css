@@ -213,7 +213,7 @@
   width: 16px;
   height: 16px;
   float: left;
-  background: url(/silk_engine/stylesheets/smoothness/images/ui-icons_454545_256x240.png);
+  background: url(/silk_engine/libs/smoothness/images/ui-icons_454545_256x240.png);
   background-position: -32px -192px;
 }
 
@@ -222,7 +222,7 @@
   width: 16px;
   height: 16px;
   float: left;
-  background: url(/silk_engine/stylesheets/smoothness/images/ui-icons_454545_256x240.png);
+  background: url(/silk_engine/libs/smoothness/images/ui-icons_454545_256x240.png);
   background-position: 0 -192px;
 }
  
@@ -273,6 +273,11 @@
 
 /* Admin Menu */
 
+#silk-admin-menu-spacer {
+  height: 35px;
+  width: 100%;
+}
+
 #silk-admin-menu, #silk-admin-menu * {
   color: #ccc;
   font: normal 12px "Lucida Grande", Arial, sans-serif;
@@ -319,20 +324,37 @@
   display: block;
   text-decoration: none;
   padding: 2px 8px;
-  margin: 0 8px 0 0;
-  background-color: #555;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
+  margin: 0 6px 0 0;
 }
 
 #silk-admin-menu-buttons a:hover {
   background-color: #666666;
   color: white;
+  background-color: #555;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
 
-#silk-admin-menu-spacer {
-  height: 35px;
-  width: 100%;
+#silk-admin-menu-user {
+  float: right;
+  margin: 9px 15px 0 0;
+}
+
+#silk-admin-menu-user a {
+  text-decoration: none; 
+}
+
+#silk-admin-menu-app-buttons {
+  float: right;
+  margin: 6px 15px 0 0;
+}
+
+#silk-admin-menu-app-buttons div {
+  width: 22px; 
+  height: 22px;
+  background-color: red;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
 }
 
 

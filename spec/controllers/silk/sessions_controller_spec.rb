@@ -68,6 +68,8 @@ describe Silk::SessionsController do
       response.should redirect_to('/')
     end
     
+    it "should not error if you logout more than once"
+    
   end
     
 end
