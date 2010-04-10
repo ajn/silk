@@ -2,8 +2,6 @@ Things I'm looking into at the moment (any help greatly appreciated):
 
 * Improve App API
 
-* Better integrate Silk routes into main app
-
 * Fix bug: Why is content being stored twice when updated?! The existing record loses the path then a new record is created... hmm...
 
 * How do we make testing/speccing fully self-contained within the plugin. At the moment I'm using the silk_testing app (which contains the silk plugin) for this and running: rake spec:silk

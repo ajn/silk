@@ -1,7 +1,7 @@
 Silk
 ====
 
-Version 0.0.2 - Alpha Release
+Version 0.0.3 - Alpha Release (For Rails 3.0.0beta2 projects only)
 
 Silk is a simple yet powerful content management system built for speed and ease of use.
 
@@ -9,33 +9,28 @@ Silk is a simple yet powerful content management system built for speed and ease
 Release Highlights
 ------------------
 
-Now fully migrated to Rails 3! Tested with Beta 2.
-Initial App support! Install the silk_simple_links plugin to see a proof of concept
-Better caching of stylesheets and javascripts and reorganisation of public directory
-Many other minor improvements
-
+Restructuring of install process - now non-destructive!
+Wrap-around routing - no more copying over/editing routes file while preserving any previously created routes
+SilkHelper inclusion from initialiser - no more copying over silk_helper.rb
+Renamed default layout from application, to silk - no more overwriting the original application layout file!
+Addition of silk-themes (default) ...?
 
 Getting started
 ---------------
 
-At the moment this preview release must be installed as a plugin into a fresh Rails 3.0.0beta2 project. Not yet tested in IE.
+As a rails plugin:
 
-1. Generate your new Rails 3 app with the rails command
-
-2. Add the following line to your Gemfile, required by Silk:
+1. Add the following line to your Gemfile, required by Silk:
    gem 'authlogic', :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
 
-3. Update your database.yml settings then create your database
+2. Install Silk with the following command:
+   rails plugin install git://github.com/ajn/silk.git
 
-4. Install and lunch Silk with the following commands:
-   rails plugin install git://github.com/aconix/silk.git
-   rake silk:install:fresh
-
-5. Edit your config/routes.rb file and replace YourApp with your application's constant. We'll get this fixed soon.
-
-6. Launch your app (rails s), goto http://localhost:3000/login and login with:
+3. Launch your app (rails s), goto http://localhost:3000/silk/login and login with:
    Username: admin
    Password: password
+
+Not yet tested in IE.
 
 
 Configuring settings
