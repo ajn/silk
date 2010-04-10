@@ -8,7 +8,7 @@ class Silk::PagesController < Silk::BaseController
   rescue ActiveRecord::RecordNotFound
     requests_edit? ? redirect_to_edit : show_page_not_found
   rescue
-     render :inline => render_error, :layout => silk_layout('application'), :type => :erb
+     render :inline => render_error, :layout => silk_layout('silk'), :type => :erb
   end
   
   def update
@@ -45,7 +45,7 @@ class Silk::PagesController < Silk::BaseController
     
     def show_page_not_found
       silk_js_action "Silk.page.createNewPagePrompt('#{silk_path}');" if current_user
-      render :inline => 'Page Not Found', :layout => silk_layout('application'), :status => 404
+      render :inline => 'Page Not Found', :layout => silk_layout('silk'), :status => 404
     end
     
     def requests_edit?

@@ -1,5 +1,6 @@
 class Silk::BaseController < ApplicationController
-  
+  layout 'silk'
+    
   before_filter :silk_initialize
   
   # Cache all snippets upon first use (works in production only as class variables do not persist in development)

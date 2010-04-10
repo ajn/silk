@@ -74,8 +74,8 @@ module SilkHelper
       @javascripts = ["libs/jquery-1.3.2.js", "libs/jquery-ui-1.7.2.custom.min.js", "core/javascripts/silk.js"]
       include_silk_app_libraries!
       javascript_tag("_silk_data = #{silk_data.to_json};") +
-      stylesheet_link_tag(@stylesheets.map{|x| "/silk_engine/#{x}"}, :cache => 'silk') +
-      javascript_include_tag(@javascripts.map{|x| "/silk_engine/#{x}"}, :cache => 'silk')
+      stylesheet_link_tag(@stylesheets.map{|x| "/silk-engine/#{x}"}, :cache => 'silk') +
+      javascript_include_tag(@javascripts.map{|x| "/silk-engine/#{x}"}, :cache => 'silk')
     end
     
     def include_silk_app_libraries!

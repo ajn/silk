@@ -40,7 +40,7 @@ class Silk::Page < ActiveRecord::Base
 
 
   def layout
-    read_attribute(:layout) || 'application'
+    read_attribute(:layout) || 'silk'
   end
   
   def protected?

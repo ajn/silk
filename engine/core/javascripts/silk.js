@@ -382,7 +382,7 @@ silk.user.prototype = {
   },
   
   logout: function() {
-    window.location = '/logout';
+    window.location = '/silk/logout';
     return this;
   },
  

@@ -9,7 +9,7 @@ class Silk::Preference
   end
   
   def self.load_from_file
-    File.read("#{RAILS_ROOT}/config/silk.yml")
+    File.read(Silk.rails 'config/silk.yml')
   end
   
   def self.get(key)
